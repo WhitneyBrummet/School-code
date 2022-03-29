@@ -4,19 +4,14 @@
 
 using namespace std;
 
-/*
-Function to take from top of deck
-Function to create random cards (for infinite deck)
-
-Function to determine hand points
-Function for policy1
-Function for policy2
-*/
+//Function to shuffle the deck
 vector<string> shuffleDeck(vector<string> deck){
     random_shuffle(deck.begin(), deck.end());
     
     return deck;
 }
+
+//function to create an ordered standard card deck
 vector<string> createDeck(vector<string> deck){
     string suit;
     string cardName;
@@ -48,6 +43,9 @@ vector<string> createDeck(vector<string> deck){
     
     return deck;
 }
+
+//Function to find the sum of points of the hand.
+//Hand can be hard or soft so ace is worth 11 or 1 point.
 int addHand(vector<string> playerHand){
     int number = 0;
     int numOfAces = 0;
@@ -71,6 +69,9 @@ int addHand(vector<string> playerHand){
     }
     return number;
 }
+
+//Function to find the sum of points of the hand.
+//Hand must be hard so ace is worth 1 point.
 int addHardHand(vector<string> playerHand){
     int number = 0;
     for (int i = 0; i < playerHand.size(); i++){
@@ -87,6 +88,13 @@ int addHardHand(vector<string> playerHand){
     }
     return number;
 }
+
+//function to calculate number of wins out of 1000 depending
+//on the policy used and the type of deck requested.
+//Available policies:
+//Policy 1: Hit until total number of points is 17 or greater, then stick.
+//Policy 2: Hit until total number of points is a hard 17 or greater, then stick.
+//Dealer always follows policy 1.
 double numOfWins(vector<string> dealerHand, vector<string> playerHand, vector<string> deck, vector<string> shuffledDeck, string policy, string deckType){
     int numberOfTimes = 1000;
     int numOfTimesWon = 0;
