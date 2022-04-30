@@ -4,14 +4,11 @@
 
 using namespace std;
 
-//Function to shuffle the deck
 vector<string> shuffleDeck(vector<string> deck){
     random_shuffle(deck.begin(), deck.end());
     
     return deck;
 }
-
-//function to create an ordered standard card deck
 vector<string> createDeck(vector<string> deck){
     string suit;
     string cardName;
@@ -43,9 +40,6 @@ vector<string> createDeck(vector<string> deck){
     
     return deck;
 }
-
-//Function to find the sum of points of the hand.
-//Hand can be hard or soft so ace is worth 11 or 1 point.
 int addHand(vector<string> playerHand){
     int number = 0;
     int numOfAces = 0;
@@ -69,9 +63,6 @@ int addHand(vector<string> playerHand){
     }
     return number;
 }
-
-//Function to find the sum of points of the hand.
-//Hand must be hard so ace is worth 1 point.
 int addHardHand(vector<string> playerHand){
     int number = 0;
     for (int i = 0; i < playerHand.size(); i++){
@@ -88,13 +79,6 @@ int addHardHand(vector<string> playerHand){
     }
     return number;
 }
-
-//function to calculate number of wins out of 1000 depending
-//on the policy used and the type of deck requested.
-//Available policies:
-//Policy 1: Hit until total number of points is 17 or greater, then stick.
-//Policy 2: Hit until total number of points is a hard 17 or greater, then stick.
-//Dealer always follows policy 1.
 double numOfWins(vector<string> dealerHand, vector<string> playerHand, vector<string> deck, vector<string> shuffledDeck, string policy, string deckType){
     int numberOfTimes = 1000;
     int numOfTimesWon = 0;
@@ -183,6 +167,89 @@ double numOfWins(vector<string> dealerHand, vector<string> playerHand, vector<st
                 }
                 
             }
+            else if (policy == "Policy3"){
+                totalOfPHand = addHand(playerHand);
+                totalOfDHand = addHand(dealerHand);
+                //hit until hand totals to 17 or greater
+                while (totalOfDHand < 17){
+                    dealerHand.push_back(shuffledDeck.back());
+                    shuffledDeck.pop_back();
+                    totalOfDHand = addHand(dealerHand);
+                }  
+                cout << "Dealer's amount of points is: " << totalOfDHand << endl;
+                
+                //if dealer hand is a bust and player hand is not a bust, player wins
+                //else if dealer hand is not a bust and playerhand is greater than dealer hand, player wins
+                //else if dealer and player tie, player is considered a win.
+                if (totalOfDHand > 21){numOfTimesWon += 1; cout << "Dealer has made a bust. Player has won." << endl << endl;}
+                else if (totalOfDHand <= 21 && totalOfPHand > totalOfDHand){numOfTimesWon += 1; cout << "Player's hand is higher than Dealer's. Player has won." << endl << endl;}
+                else if (totalOfDHand <= 21 && totalOfPHand == totalOfDHand){numOfTimesWon += 1;cout << "Player's hand is the same as Dealer's. Player has won." << endl << endl;}
+                else {cout << "Dealer wins" << endl << endl;}
+            }
+            else if (policy == "Policy4"){
+                totalOfPHand = addHand(playerHand);
+                
+                //hit until hand totals to 19 or greater
+                while (totalOfPHand < 19){
+                    playerHand.push_back(shuffledDeck.back());
+                    shuffledDeck.pop_back();
+                    totalOfPHand = addHand(playerHand);
+                }
+                cout << "Player's amount of points is: " << totalOfPHand << endl;
+                if (totalOfPHand > 21){cout << "Player has made a bust. Player has lost." << endl << endl;}
+                
+                //if hand total is not a bust
+                if (totalOfPHand <= 21){
+                    totalOfDHand = addHand(dealerHand);
+                    //hit until hand totals to 17 or greater
+                    while (totalOfDHand < 17){
+                        dealerHand.push_back(shuffledDeck.back());
+                        shuffledDeck.pop_back();
+                        totalOfDHand = addHand(dealerHand);
+                    }  
+                    cout << "Dealer's amount of points is: " << totalOfDHand << endl;
+                    
+                    //if dealer hand is a bust and player hand is not a bust, player wins
+                    //else if dealer hand is not a bust and playerhand is greater than dealer hand, player wins
+                    //else if dealer and player tie, player is considered a win.
+                    if (totalOfDHand > 21){numOfTimesWon += 1; cout << "Dealer has made a bust. Player has won." << endl << endl;}
+                    else if (totalOfDHand <= 21 && totalOfPHand > totalOfDHand){numOfTimesWon += 1; cout << "Player's hand is higher than Dealer's. Player has won." << endl << endl;}
+                    else if (totalOfDHand <= 21 && totalOfPHand == totalOfDHand){numOfTimesWon += 1; cout << "Player's hand is the same as Dealer's. Player has won." << endl << endl;}
+                    else {cout << "Dealer wins" << endl << endl;}
+                }
+            }
+            else if (policy == "Policy5"){
+                totalOfPHand = addHand(playerHand);
+                
+                //hit until hand totals to 15 or greater
+                while (totalOfPHand < 15){
+                    playerHand.push_back(shuffledDeck.back());
+                    shuffledDeck.pop_back();
+                    totalOfPHand = addHand(playerHand);
+                }
+                cout << "Player's amount of points is: " << totalOfPHand << endl;
+                if (totalOfPHand > 21){cout << "Player has made a bust. Player has lost." << endl << endl;}
+                
+                //if hand total is not a bust
+                if (totalOfPHand <= 21){
+                    totalOfDHand = addHand(dealerHand);
+                    //hit until hand totals to 17 or greater
+                    while (totalOfDHand < 17){
+                        dealerHand.push_back(shuffledDeck.back());
+                        shuffledDeck.pop_back();
+                        totalOfDHand = addHand(dealerHand);
+                    }  
+                    cout << "Dealer's amount of points is: " << totalOfDHand << endl;
+                    
+                    //if dealer hand is a bust and player hand is not a bust, player wins
+                    //else if dealer hand is not a bust and playerhand is greater than dealer hand, player wins
+                    //else if dealer and player tie, player is considered a win.
+                    if (totalOfDHand > 21){numOfTimesWon += 1; cout << "Dealer has made a bust. Player has won." << endl << endl;}
+                    else if (totalOfDHand <= 21 && totalOfPHand > totalOfDHand){numOfTimesWon += 1; cout << "Player's hand is higher than Dealer's. Player has won." << endl << endl;}
+                    else if (totalOfDHand <= 21 && totalOfPHand == totalOfDHand){numOfTimesWon += 1; cout << "Player's hand is the same as Dealer's. Player has won." << endl << endl;}
+                    else {cout << "Dealer wins" << endl << endl;}
+                }
+            }
             cout << "Shuffling cards for next game..." << endl << endl;
             shuffledDeck = shuffleDeck(deck);
         }
@@ -265,6 +332,94 @@ double numOfWins(vector<string> dealerHand, vector<string> playerHand, vector<st
                     else {cout << "Dealer wins" << endl << endl;}
                 }
             }
+            else if (policy == "Policy3"){
+                totalOfPHand = addHand(playerHand);
+                totalOfDHand = addHand(dealerHand);
+                //hit until hand totals to 17 or greater
+                while (totalOfDHand < 17){
+                    rNum = rand() % 52;
+                    dealerHand.push_back(deck.at(rNum));
+                    totalOfDHand = addHand(dealerHand);
+                }  
+                cout << "Dealer's amount of points is: " << totalOfDHand << endl;
+                
+                //if dealer hand is a bust and player hand is not a bust, player wins
+                //else if dealer hand is not a bust and playerhand is greater than dealer hand, player wins
+                //else if dealer and player tie, player is considered a win.
+                if (totalOfDHand > 21){numOfTimesWon += 1; cout << "Dealer has made a bust. Player has won." << endl << endl;}
+                else if (totalOfDHand <= 21 && totalOfPHand > totalOfDHand){numOfTimesWon += 1; cout << "Player's hand is higher than Dealer's. Player has won." << endl << endl;}
+                else if (totalOfDHand <= 21 && totalOfPHand == totalOfDHand){numOfTimesWon += 1;cout << "Player's hand is the same as Dealer's. Player has won." << endl << endl;}
+                else {cout << "Dealer wins" << endl << endl;}
+            }
+            else if (policy == "Policy4"){
+                totalOfPHand = addHand(playerHand);
+                
+                //hit until hand totals to 19 or greater
+                while (totalOfPHand < 19){
+                    int rNum = rand() % 52;
+                    playerHand.push_back(deck.at(rNum));
+                    totalOfPHand = addHand(playerHand);
+                }
+                cout << "Player's amount of points is: " << totalOfPHand << endl;
+                if (totalOfPHand > 21){cout << "Player has made a bust. Player has lost." << endl << endl;}
+                
+                //if hand total is not a bust
+                if (totalOfPHand <= 21){
+                    totalOfDHand = addHand(dealerHand);
+                    
+                    //hit until hand totals to 17 or greater
+                    while (totalOfDHand < 17){
+                        rNum = rand() % 52;
+                        dealerHand.push_back(deck.at(rNum));
+                        totalOfDHand = addHand(dealerHand);
+                    }  
+
+                    cout << "Dealer's amount of points is: " << totalOfDHand << endl;
+                    
+                    //if dealer hand is a bust and player hand is not a bust, player wins
+                    //else if dealer hand is not a bust and playerhand is greater than dealer hand, player wins
+                    //else if dealer and player tie, player is considered a win.
+                    if (totalOfDHand > 21){numOfTimesWon += 1;cout << "Dealer has made a bust. Player has won." << endl << endl;}
+                    else if (totalOfDHand <= 21 && totalOfPHand > totalOfDHand){numOfTimesWon += 1;cout << "Player's hand is higher than Dealer's. Player has won." << endl << endl;}
+                    else if (totalOfDHand <= 21 && totalOfPHand == totalOfDHand){numOfTimesWon += 1;cout << "Player's hand is the same as Dealer's. Player has won." << endl << endl;}
+                    else {cout << "Dealer wins" << endl << endl;}
+                }
+            }
+            else if (policy == "Policy5"){
+                totalOfPHand = addHand(playerHand);
+                
+                //hit until hand totals to 15 or greater
+                while (totalOfPHand < 15){
+                    int rNum = rand() % 52;
+                    playerHand.push_back(deck.at(rNum));
+                    totalOfPHand = addHand(playerHand);
+                }
+                cout << "Player's amount of points is: " << totalOfPHand << endl;
+                if (totalOfPHand > 21){cout << "Player has made a bust. Player has lost." << endl << endl;}
+                
+                //if hand total is not a bust
+                if (totalOfPHand <= 21){
+                    totalOfDHand = addHand(dealerHand);
+                    
+                    //hit until hand totals to 17 or greater
+                    while (totalOfDHand < 17){
+                        rNum = rand() % 52;
+                        dealerHand.push_back(deck.at(rNum));
+                        totalOfDHand = addHand(dealerHand);
+                    }  
+
+                    cout << "Dealer's amount of points is: " << totalOfDHand << endl;
+                    
+                    //if dealer hand is a bust and player hand is not a bust, player wins
+                    //else if dealer hand is not a bust and playerhand is greater than dealer hand, player wins
+                    //else if dealer and player tie, player is considered a win.
+                    if (totalOfDHand > 21){numOfTimesWon += 1;cout << "Dealer has made a bust. Player has won." << endl << endl;}
+                    else if (totalOfDHand <= 21 && totalOfPHand > totalOfDHand){numOfTimesWon += 1;cout << "Player's hand is higher than Dealer's. Player has won." << endl << endl;}
+                    else if (totalOfDHand <= 21 && totalOfPHand == totalOfDHand){numOfTimesWon += 1;cout << "Player's hand is the same as Dealer's. Player has won." << endl << endl;}
+                    else {cout << "Dealer wins" << endl << endl;}
+                }
+            }
+            
         }
         numberOfTimes -= 1;
     }
@@ -288,12 +443,24 @@ int main()
     double winProbabilityP2 = numOfWins(dealerHand, playerHand, deck, shuffledDeck, "Policy1", "Finite");
     double winProbabilityP3 = numOfWins(dealerHand, playerHand, deck, shuffledDeck, "Policy2", "Infinite");
     double winProbabilityP4 = numOfWins(dealerHand, playerHand, deck, shuffledDeck, "Policy2", "Finite");
+    double winProbabilityP5 = numOfWins(dealerHand, playerHand, deck, shuffledDeck, "Policy3", "Infinite");
+    double winProbabilityP6 = numOfWins(dealerHand, playerHand, deck, shuffledDeck, "Policy3", "Finite");
+    double winProbabilityP7 = numOfWins(dealerHand, playerHand, deck, shuffledDeck, "Policy4", "Infinite");
+    double winProbabilityP8 = numOfWins(dealerHand, playerHand, deck, shuffledDeck, "Policy4", "Finite");
+    double winProbabilityP9 = numOfWins(dealerHand, playerHand, deck, shuffledDeck, "Policy5", "Infinite");
+    double winProbabilityP10 = numOfWins(dealerHand, playerHand, deck, shuffledDeck, "Policy5", "Finite");
     
     cout << "Calculating win probabilities..." << endl;
     cout << "The probability of winning if the deck is infinite and the player sticks after reaching 17: " << winProbabilityP1 << endl;
     cout << "The probability of winning if the deck is standard and the player sticks after reaching 17: " << winProbabilityP2 << endl;
     cout << "The probability of winning if the deck is infinite and the player sticks after reaching a hard 17: " << winProbabilityP3 << endl;
     cout << "The probability of winning if the deck is standard and the player sticks after reaching a hard 17: " << winProbabilityP4 << endl;
+    cout << "The probability of winning if the deck is infinite and the player sticks after the initial deal: " << winProbabilityP5 << endl;
+    cout << "The probability of winning if the deck is standard and the player sticks after the initial deal: " << winProbabilityP6 << endl;
+    cout << "The probability of winning if the deck is infinite and the player sticks after reaching 19: " << winProbabilityP7 << endl;
+    cout << "The probability of winning if the deck is standard and the player sticks after reaching 19: " << winProbabilityP8 << endl;
+    cout << "The probability of winning if the deck is infinite and the player sticks after reaching 15: " << winProbabilityP9 << endl;
+    cout << "The probability of winning if the deck is standard and the player sticks after reaching 15: " << winProbabilityP10 << endl;
     
     return 0;
 }
